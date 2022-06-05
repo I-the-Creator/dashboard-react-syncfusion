@@ -31,10 +31,10 @@ import "./App.css";
 
 const App = () => {
 
-  const { activeMenu } = useStateContext()  // get state context from ContextProvider
+  const { activeMenu, themeSettings, setThemeSettings, currentColor, currentMode } = useStateContext()  // get state context from ContextProvider
 
   return (
-    <div>
+    <div className={currentMode === 'Dark' ? 'dark' : ''}>
       <BrowserRouter>
         <div className="flex relative dark:bg-main-dark-bg">
           <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
@@ -42,7 +42,8 @@ const App = () => {
               <button
                 type="button"
                 className="text-3xl p-3 hover:drop-shadow-xl hover:bg-light-gray text-white"
-                style={{ background: "blue", borderRadius: "50%" }} // to dynamically change 'Settings' button color
+                onClick={() => setThemeSettings(true)}  // to show the Theme Settings panel
+                style={{ background: currentColor, borderRadius: "50%" }} // to dynamically change 'Settings' button color
               >
                 <FiSettings />
               </button>
@@ -62,14 +63,18 @@ const App = () => {
             </div>
           )}
           <div
-            className={`dark:bg-main-bg bg-main-bg min-h-screen w-full ${
+            className={`dark:bg-main-dark-bg bg-main-bg min-h-screen w-full ${
               activeMenu ? "md:ml-72" : "flex-2"
             }`}
+            style={{ overflow: "auto"}}    // to disable scroll at the page bottom  
           >
             <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full">
               <Navbar />
             </div>
             <div>
+              {/* Themes */}
+              {themeSettings && <ThemeSettings /> }
+            
               <Routes>
                 {/* Dashboard */}
                 <Route path="/" element={<Ecommerce />} />
