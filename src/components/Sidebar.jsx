@@ -10,17 +10,20 @@ import { useStateContext } from "../context/ContextProvider";
 import { links } from "../data/dummy";
 
 const Sidebar = () => {
-  const { activeMenu, setActiveMenu, screenSize } = useStateContext();  // get state context from ContextProvider
+  const { activeMenu, setActiveMenu, screenSize, currentColor } =
+    useStateContext(); // get state context from ContextProvider
 
-  // to handle SideBar closing if 
+  // to handle SideBar closing if
   const handleCloseSideBar = () => {
-    if(activeMenu && screenSize <= 900) {
-      setActiveMenu(false)
+    if (activeMenu && screenSize <= 900) {
+      setActiveMenu(false);
     }
-  }
+  };
 
-  const activeLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-orange-600 text-lg m-2' // styles when link is active
-  const normalLink = 'flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-lg text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2'
+  const activeLink =
+    "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-white text-lg m-2";
+  const normalLink =
+    "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-lg text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2";
 
   return (
     <div className="ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10">
@@ -36,10 +39,12 @@ const Sidebar = () => {
               <span>Shoppy</span>
             </Link>
             {/* Tooltip Component - the button to close SideBar */}
-            <TooltipComponent content="Menu" position="BottomCenter">  
+            <TooltipComponent content="Menu" position="BottomCenter">
               <button
                 type="button"
-                onClick={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)}
+                onClick={() =>
+                  setActiveMenu((prevActiveMenu) => !prevActiveMenu)
+                }
                 className="text-xl rounded-full p-3 hover:bg-light-gray mt-4 block md:hidden"
               >
                 <MdOutlineCancel />
@@ -49,20 +54,21 @@ const Sidebar = () => {
           <div className="mt-10">
             {links.map((item) => (
               <div key={item.title}>
-                <p className="text-gray-400 m-3 mt-4 uppercase">
-                  {item.title}
-                </p>
+                <p className="text-gray-400 m-3 mt-4 uppercase">{item.title}</p>
                 {item.links.map((link) => (
                   <NavLink
                     to={`/${link.name}`}
                     key={link.name}
-                    onClick={handleCloseSideBar}  // close sidebar after click if screen size < 900
-                    className={({ isActive }) => isActive ? activeLink : normalLink }     // isActive - the NavLink inner state
+                    onClick={handleCloseSideBar} // close sidebar after click if screen size < 900
+                    style={({ isActive }) => ({
+                      backgroundColor: isActive ? currentColor : "",
+                    })}
+                    className={({ isActive }) =>
+                      isActive ? activeLink : normalLink
+                    } // isActive - the NavLink inner property - get it from callback destructured parameters
                   >
                     {link.icon}
-                    <span className="capitalize">
-                      {link.name}
-                    </span>
+                    <span className="capitalize">{link.name}</span>
                   </NavLink>
                 ))}
               </div>
